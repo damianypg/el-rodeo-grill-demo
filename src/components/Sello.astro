@@ -1,0 +1,9 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/el-rodeo-grill-logo.png';
+interface Props { size: number; alt?: string; loading?: 'eager' | 'lazy'; class?: string }
+const { size, alt = '', loading = 'lazy', class: cls = '' } = Astro.props;
+---
+<span class:list={['inline-grid shrink-0 place-items-center rounded-full bg-carbon-950 ring-2 ring-oro-500 ring-offset-2 ring-offset-carbon-950', cls]} style={`width:${size}px;height:${size}px`}>
+  <Image src={logo} alt={alt} width={size} height={size} densities={[1, 2]} loading={loading} class="rounded-full" style={`width:${size - 4}px;height:${size - 4}px`} />
+</span>

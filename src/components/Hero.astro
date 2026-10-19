@@ -1,0 +1,89 @@
+---
+import afiche from '../assets/flyers/flyer-rib-eye.jpg';
+import site from '../data/site.json';
+import Icon from './Icon.astro';
+import Brasas from './Brasas.astro';
+import Foto from './Foto.astro';
+import { waLink, waMensajes } from '../lib/wa';
+---
+<section id="inicio" class="madera relative isolate overflow-hidden lg:min-h-[calc(92vh-68px)]">
+  <Brasas class="brasas-hero bottom-0" chispas={20} />
+  <div class="contenedor grid items-center gap-8 pt-6 pb-14 md:pt-10 lg:min-h-[calc(92vh-68px)] lg:grid-cols-[1fr_minmax(0,560px)] lg:gap-12 lg:py-16">
+    <div class="hero-texto relative z-10">
+      <p class="script text-script-xl -mb-1 ml-1 entrada" style="--i:0">{site.lema}</p>
+      <h1 class="text-display">
+        <span class="entrada block" style="--i:1">Carnes a la brasa</span>
+        <span class="entrada block" style="--i:2">en Riobamba</span>
+      </h1>
+      <p class="text-lead entrada mt-5 max-w-[36ch] text-hueso-50" style="--i:3">
+        Rib eye, tomahawk, picaña y más cortes a la parrilla, servidos con papas, ensalada y nuestras salsas.
+      </p>
+      <div class="entrada mt-7 flex flex-wrap gap-3" style="--i:4">
+        <a class="btn btn-primary" href={waLink(waMensajes.pedido)} target="_blank" rel="noopener" data-wa>
+          <Icon name="whatsapp" />Pedir por WhatsApp
+        </a>
+        <a class="btn btn-outline" href="#cortes">Ver los cortes</a>
+      </div>
+      <ul class="entrada mt-8 grid gap-3 text-[0.9375rem] sm:grid-cols-3 sm:gap-4" style="--i:5" aria-label="Por qué El Rodeo">
+        <li class="flex items-center gap-2.5">
+          <span class="flex shrink-0 text-brasa-500" aria-hidden="true"><Icon name="estrella" class="size-5" /></span>
+          <span><strong class="text-white">{site.google.rating} en Google</strong><br /><span class="muted">{site.google.reviews} reseñas</span></span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <Icon name="pin" class="size-5 shrink-0 text-brasa-500" />
+          <span><strong class="text-white">Nuevo local</strong><br /><span class="muted">calle Pichincha</span></span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span class="grid size-5 shrink-0 place-items-center font-display text-brasa-500" aria-hidden="true">$</span>
+          <span><strong class="text-white">Cortes desde $12</strong><br /><span class="muted">con papas y ensalada</span></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="poster-escena order-first mx-auto w-full max-w-[540px] lg:order-none" data-parallax>
+      <div class="poster">
+        <Foto
+          src={afiche}
+          alt="Afiche del Rib Eye, «el corte favorito»: pequeño $12, mediano $15. Rib eye con hueso sobre tabla negra con papas fritas, ensalada y dos salsas"
+          sizes="(min-width: 1024px) 540px, min(540px, calc(100vw - 56px))"
+          loading="eager"
+          fetchpriority="high"
+          class="rounded-xl"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Póster inclinado con sombra y resplandor de brasa; aterriza y luego flota (DESIGN.md §7). */
+  .poster-escena { perspective: 1200px; padding: 12px; }
+  .poster {
+    position: relative;
+    transform: rotate(-3.5deg);
+    border-radius: 14px;
+    box-shadow: 0 30px 60px -18px rgb(0 0 0 / 0.85), 0 0 0 3px rgb(255 255 255 / 0.9), 0 0 70px 6px rgb(240 138 36 / 0.45);
+  }
+  .poster::before {
+    content: ''; position: absolute; inset: -14%; z-index: -1; border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(240 138 36 / 0.55), rgb(214 58 31 / 0.25) 55%, transparent);
+    filter: blur(20px);
+  }
+  :global(.brasas-hero) { height: 280px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .poster { animation: aterrizar 900ms var(--ease-out) 150ms both, flotar 6s ease-in-out 1100ms infinite; }
+    .poster::before { animation: latir 3s ease-in-out 1100ms infinite alternate; }
+    .entrada { animation: subir-texto 700ms var(--ease-out) both; animation-delay: calc(var(--i) * 90ms); }
+  }
+  @keyframes aterrizar {
+    from { transform: translateY(60px) rotate(-10deg) scale(0.9); }
+    to { transform: rotate(-3.5deg); }
+  }
+  @keyframes flotar {
+    0%, 100% { transform: rotate(-3.5deg) translateY(0); }
+    50% { transform: rotate(-2.5deg) translateY(-10px); }
+  }
+  @keyframes latir { from { opacity: 0.7; } to { opacity: 1; } }
+  /* Solo transform: el texto se pinta desde el primer cuadro (no retrasa el LCP). */
+  @keyframes subir-texto { from { transform: translateY(18px); } to { transform: none; } }
+</style>

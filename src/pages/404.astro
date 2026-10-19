@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Sello from '../components/Sello.astro';
+import Icon from '../components/Icon.astro';
+import { waLink, waMensajes } from '../lib/wa';
+---
+<Base title="Página no encontrada | El Rodeo Grill" description="Esta página no existe. Vuelve al inicio de El Rodeo Grill, restaurante y asadero en Riobamba.">
+  <main class="madera grid min-h-dvh place-items-center px-4 py-16 text-center">
+    <div class="flex flex-col items-center">
+      <Sello size={96} loading="eager" />
+      <p class="script text-script-xl mt-8 -mb-1">Uy, se nos quemó</p>
+      <h1 class="text-h2">Esta página no existe</h1>
+      <p class="text-lead mt-4 max-w-[40ch] text-hueso-50">Puede que el enlace esté mal escrito. La parrilla sigue en la página de inicio.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a class="btn btn-primary" href={import.meta.env.BASE_URL}>Volver al inicio</a>
+        <a class="btn btn-outline" href={waLink(waMensajes.pedido)} target="_blank" rel="noopener"><Icon name="whatsapp" />Pedir por WhatsApp</a>
+      </div>
+    </div>
+  </main>
+</Base>

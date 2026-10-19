@@ -1,0 +1,27 @@
+---
+import site from '../data/site.json';
+import Sello from './Sello.astro';
+import Icon from './Icon.astro';
+---
+<footer class="carbon border-t-2 border-oro-500/40 pt-14 pb-32 lg:pb-16">
+  <div class="contenedor grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr]">
+    <div class="md:col-span-2 lg:col-span-1">
+      <div class="flex items-center gap-4">
+        <Sello size={84} />
+        <p class="font-display text-3xl tracking-wide text-white uppercase">{site.nombre}</p>
+      </div>
+      <p class="script text-script mt-4">{site.lema}</p>
+    </div>
+    <div>
+      <p class="font-display text-lg tracking-wide text-oro-300 uppercase">Dónde estamos</p>
+      <p class="mt-2 text-hueso-50">{site.direccion}<br />{site.ciudad}, Ecuador</p>
+    </div>
+    <div>
+      <p class="font-display text-lg tracking-wide text-oro-300 uppercase">Síguenos</p>
+      <ul class="mt-1">
+        <li><a class="flex min-h-11 items-center gap-2 font-semibold text-hueso-50 hover:text-oro-300" href={site.instagram.url} target="_blank" rel="noopener"><Icon name="instagram" class="size-5" />Instagram {site.instagram.usuario}</a></li>
+        <li><a class="flex min-h-11 items-center gap-2 font-semibold text-hueso-50 hover:text-oro-300" href={site.facebook.url} target="_blank" rel="noopener"><Icon name="facebook" class="size-5" />Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

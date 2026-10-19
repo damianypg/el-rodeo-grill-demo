@@ -1,0 +1,62 @@
+---
+import site from '../data/site.json';
+import Icon from './Icon.astro';
+import { waLink, waMensajes, mapsLink, mapsEmbed } from '../lib/wa';
+---
+<section id="visitanos" class="madera seccion" aria-labelledby="visitanos-titulo">
+  <div class="contenedor grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+    <div>
+      <p class="script text-script-xl -mb-1">En el nuevo local</p>
+      <h2 id="visitanos-titulo" class="text-h2">Visítanos</h2>
+
+      <div class="mt-8 flex items-start gap-5">
+        <!-- Croquis de la esquina: detalle, no protagonista -->
+        <svg viewBox="0 0 120 120" class="size-24 shrink-0 md:size-28" role="img" aria-labelledby="croquis-t">
+          <title id="croquis-t">Croquis: calle Pichincha entre Guayaquil y 10 de Agosto</title>
+          <rect width="120" height="120" rx="60" class="fill-carbon-950" />
+          <g class="fill-madera-700"><rect x="8" y="8" width="26" height="46" rx="4" /><rect x="44" y="8" width="32" height="46" rx="4" /><rect x="86" y="8" width="26" height="46" rx="4" /><rect x="8" y="66" width="26" height="46" rx="4" /><rect x="44" y="66" width="32" height="46" rx="4" /><rect x="86" y="66" width="26" height="46" rx="4" /></g>
+          <g class="stroke-hueso-50" stroke-opacity=".35" stroke-dasharray="3 4" stroke-width="1.5"><line x1="0" y1="60" x2="120" y2="60" /><line x1="39" y1="0" x2="39" y2="120" /><line x1="81" y1="0" x2="81" y2="120" /></g>
+          <circle cx="60" cy="40" r="10" class="fill-brasa-500" /><path d="M53 45 L60 58 L67 45 Z" class="fill-brasa-500" /><circle cx="60" cy="40" r="4" class="fill-carbon-950" />
+          <circle cx="60" cy="60" r="58" fill="none" class="stroke-oro-500" stroke-width="2" />
+        </svg>
+        <dl class="grid gap-1">
+          <dt class="font-display text-xl tracking-wide text-oro-300 uppercase">Dirección</dt>
+          <dd class="text-lead text-white">{site.direccion}, {site.ciudad}</dd>
+          <dd><a class="enlace enlace-tactil" href={mapsLink} target="_blank" rel="noopener">Abrir en Google Maps</a></dd>
+        </dl>
+      </div>
+
+      <dl class="mt-8 grid gap-6 sm:grid-cols-2">
+        <div>
+          <dt class="flex items-center gap-3 font-display text-xl tracking-wide text-oro-300 uppercase"><Icon name="reloj" class="size-6" />Horario</dt>
+          {site.horario.franjas.map((f) => (
+            <dd class="mt-2 flex justify-between gap-4 border-b border-white/10 pb-2 text-hueso-50"><span>{f.dias}</span><span class="font-semibold text-white tabular-nums">{f.abre}–{f.cierra}</span></dd>
+          ))}
+          <dd class="mt-2 text-[0.875rem] muted">{site.horario.nota}</dd>
+        </div>
+        <div>
+          <dt class="flex items-center gap-3 font-display text-xl tracking-wide text-oro-300 uppercase"><Icon name="whatsapp" class="size-6" />Pedidos y reservas</dt>
+          <dd class="mt-1"><a class="enlace enlace-tactil text-lead" href={`tel:+${site.whatsapp}`}>{site.telefonoVisible}</a></dd>
+          <dd class="text-[0.875rem] muted">Precio promedio: {site.precioPorPersona}</dd>
+        </div>
+      </dl>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a class="btn btn-primary" href={waLink(waMensajes.reserva)} target="_blank" rel="noopener" data-wa>
+          <Icon name="whatsapp" />Reservar por WhatsApp
+        </a>
+        <a class="btn btn-outline" href={mapsLink} target="_blank" rel="noopener"><Icon name="pin" />Cómo llegar</a>
+      </div>
+    </div>
+
+    <div class="mapa relative min-h-80 overflow-hidden rounded-(--radius-tabla) bg-carbon-950 shadow-(--shadow-tabla) ring-2 ring-oro-500/60">
+      <iframe
+        title="Mapa de la calle Pichincha y Guayaquil, en Riobamba"
+        src={mapsEmbed}
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        class="absolute inset-0 h-full w-full border-0"
+      ></iframe>
+    </div>
+  </div>
+</section>

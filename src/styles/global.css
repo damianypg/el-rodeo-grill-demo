@@ -1,0 +1,197 @@
+@import "tailwindcss";
+
+/* Tokens primitivos: ver DESIGN.md §2–§5 */
+@theme {
+  --color-carbon-950: #0e0907;
+  --color-madera-900: #1b0e09;
+  --color-madera-800: #24130c;
+  --color-madera-700: #33190f;
+  --color-rojo-900: #5c120b;
+  --color-rojo-800: #7a1a10;
+  --color-rojo-500: #d63a1f;
+  --color-brasa-600: #e07d1f;
+  --color-brasa-500: #f08a24;
+  --color-brasa-300: #ffb15c;
+  --color-oro-300: #f2c86b;
+  --color-oro-500: #d4a24c;
+  --color-hueso-50: #f7f1e8;
+  --color-humo-300: #c9b8a6;
+  --color-cafe-600: #8a6650;
+  --color-wa-500: #25d366;
+
+  /* Las familias las declara Astro (astro.config.mjs → fonts) con respaldos de métricas ajustadas. */
+  --font-display: var(--font-anton);
+  --font-script: var(--font-yellowtail);
+  --font-sans: var(--font-figtree);
+
+  --text-mega: clamp(5.5rem, 3rem + 12vw, 12rem);
+  --text-mega--line-height: 0.82;
+  --text-display: clamp(3rem, 1.6rem + 6vw, 6.5rem);
+  --text-display--line-height: 0.92;
+  --text-h2: clamp(2.5rem, 1.6rem + 3.4vw, 4.25rem);
+  --text-h2--line-height: 0.95;
+  --text-h3: clamp(1.75rem, 1.4rem + 1.2vw, 2.375rem);
+  --text-h3--line-height: 1;
+  --text-script-xl: clamp(2.25rem, 1.6rem + 2.4vw, 3.75rem);
+  --text-script-xl--line-height: 1;
+  --text-script: clamp(1.625rem, 1.3rem + 1vw, 2.25rem);
+  --text-script--line-height: 1;
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --text-lead--line-height: 1.55;
+
+  --radius-tabla: 20px;
+  --shadow-tabla: 0 18px 40px -12px rgb(0 0 0 / 0.7);
+  --shadow-float: 0 8px 28px rgb(0 0 0 / 0.5);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; background: var(--color-carbon-950); }
+  body {
+    background: var(--color-madera-900);
+    color: var(--color-hueso-50);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (min-width: 768px) { body { font-size: 1.0625rem; } }
+
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; color: #fff; text-wrap: balance; }
+  p { text-wrap: pretty; }
+
+  :focus-visible { outline: 3px solid var(--color-oro-300); outline-offset: 3px; border-radius: 6px; }
+  /* El foco entra al documento del iframe y :focus no aplica al iframe; se marca su contenedor. */
+  .mapa:focus-within { outline: 3px solid var(--color-oro-300); outline-offset: 3px; }
+  /* Móvil: la barra fija de WhatsApp (60 px) no debe tapar el elemento con foco (WCAG 2.4.11). */
+  @media (max-width: 1023px) { html { scroll-padding-bottom: 76px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  .contenedor { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: 16px; }
+  @media (min-width: 768px) { .contenedor { padding-inline: 24px; } }
+  .seccion { padding-block: clamp(64px, 4rem + 4vw, 120px); position: relative; isolation: isolate; }
+
+  /* Madera: tablones horizontales + vetas + viñeta (DESIGN.md §4) */
+  .madera, .madera-roja {
+    --tablon-a: var(--color-madera-800);
+    --tablon-b: var(--color-madera-900);
+    --junta: rgb(8 4 3 / 0.85);
+    --vineta: rgb(14 9 7 / 0.82);
+    background-color: var(--tablon-b);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='360'%3E%3Cfilter id='v'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.32' numOctaves='3' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 0.02 0 0 0 0 0.01 0 0 0 0 0.005 0.9 0 0 0 -0.32'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23v)'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse 120% 90% at 50% 35%, transparent 35%, var(--vineta) 100%),
+      repeating-linear-gradient(180deg, transparent 0 86px, var(--junta) 86px 88px, rgb(255 220 190 / 0.05) 88px 89px, transparent 89px 90px),
+      repeating-linear-gradient(180deg, var(--tablon-a) 0 90px, var(--tablon-b) 90px 180px, color-mix(in oklab, var(--tablon-a) 70%, var(--tablon-b)) 180px 270px);
+  }
+  .madera-roja {
+    --tablon-a: var(--color-rojo-800);
+    --tablon-b: var(--color-rojo-900);
+    --vineta: rgb(30 5 3 / 0.85);
+  }
+  .carbon {
+    background-color: var(--color-carbon-950);
+    background-image: radial-gradient(ellipse 80% 60% at 50% 0%, rgb(240 138 36 / 0.08), transparent 70%);
+  }
+
+  /* Línea de brasas en el horizonte, como en los flyers */
+  .brasas {
+    position: absolute; inset-inline: 0; height: 200px; pointer-events: none; z-index: -1;
+    background:
+      radial-gradient(ellipse 35% 70% at 22% 100%, rgb(240 138 36 / 0.75), transparent 70%),
+      radial-gradient(ellipse 30% 85% at 58% 100%, rgb(214 58 31 / 0.85), transparent 70%),
+      radial-gradient(ellipse 40% 60% at 88% 100%, rgb(255 177 92 / 0.6), transparent 70%),
+      radial-gradient(ellipse 70% 45% at 50% 100%, rgb(214 58 31 / 0.5), transparent 75%);
+    filter: blur(14px);
+    -webkit-mask-image: linear-gradient(to top, #000 35%, transparent);
+    mask-image: linear-gradient(to top, #000 35%, transparent);
+    animation: titilar 5s ease-in-out infinite alternate;
+  }
+  @keyframes titilar { from { opacity: 0.85; } to { opacity: 1; } }
+
+  .chispa {
+    position: absolute; bottom: 0; left: var(--x); width: var(--s); height: var(--s); border-radius: 50%;
+    background: var(--color-brasa-300); box-shadow: 0 0 8px 2px rgb(240 138 36 / 0.8);
+    opacity: 0; pointer-events: none;
+    animation: subir var(--d) linear var(--delay) infinite;
+  }
+  @keyframes subir {
+    0% { transform: translate3d(0, 0, 0); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translate3d(var(--dx), -70vh, 0); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .chispa { display: none; } .brasas { animation: none; } }
+
+  /* Tipografía de marca */
+  .script {
+    display: block; font-family: var(--font-script); color: var(--color-oro-300);
+    text-transform: none; letter-spacing: 0; transform: rotate(-4deg); transform-origin: left bottom; white-space: nowrap;
+    text-shadow: 0 2px 12px rgb(0 0 0 / 0.6);
+  }
+
+  /* Numerales 2x1 con relieve rojo, como en el flyer del miércoles */
+  .relieve { text-shadow: 0.04em 0.04em 0 var(--color-rojo-500), 0.08em 0.08em 0 rgb(14 9 7 / 0.55); }
+
+  /* Botones */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: 52px; padding: 12px 26px; border-radius: 999px;
+    font-weight: 800; font-size: 1.0625rem; line-height: 1.15; text-decoration: none; cursor: pointer;
+    transition: background-color 150ms ease-in-out, color 150ms ease-in-out, border-color 150ms ease-in-out, transform 200ms var(--ease-out);
+  }
+  .btn svg { width: 22px; height: 22px; flex: none; }
+  .btn-primary { background: var(--color-brasa-500); color: var(--color-carbon-950); box-shadow: 0 6px 24px -6px rgb(240 138 36 / 0.6); }
+  .btn-primary:hover { background: var(--color-brasa-300); transform: translateY(-1px); }
+  .btn-primary:active { background: var(--color-brasa-600); transform: none; }
+  .btn-outline { border: 2px solid rgb(247 241 232 / 0.7); color: #fff; background: rgb(14 9 7 / 0.35); }
+  .btn-outline:hover { border-color: var(--color-oro-300); color: var(--color-oro-300); }
+  .btn-sm { min-height: 44px; padding: 8px 18px; font-size: 0.9375rem; }
+
+  .enlace { color: var(--color-brasa-500); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; font-weight: 700; }
+  .enlace:hover { color: var(--color-brasa-300); }
+  .enlace-tactil { display: inline-flex; align-items: center; min-height: 44px; }
+
+  .muted { color: var(--color-humo-300); }
+
+  /* Precio en aro (DESIGN.md §3) */
+  .aro {
+    --aro: 96px;
+    display: inline-grid; place-items: center; width: var(--aro); height: var(--aro); flex: none;
+    border: 3px solid #fff; border-radius: 50%; color: #fff;
+    background: rgb(14 9 7 / 0.55); backdrop-filter: blur(2px);
+    font-family: var(--font-display); line-height: 1;
+  }
+  .aro-lg { --aro: 132px; }
+  .aro-sm { --aro: 72px; border-width: 2px; }
+  .aro-cifra { display: flex; align-items: flex-start; }
+  .aro-signo { font-size: calc(var(--aro) * 0.2); margin-top: calc(var(--aro) * 0.06); }
+  .aro-entero { font-size: calc(var(--aro) * 0.42); letter-spacing: -0.01em; }
+  .aro-cent { font-size: calc(var(--aro) * 0.18); margin-top: calc(var(--aro) * 0.05); margin-left: 2px; border-bottom: 2px solid currentColor; padding-bottom: 1px; }
+  .aro-etiqueta { font-family: var(--font-sans); font-weight: 700; font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: -0.25rem; }
+  .aro-con-etiqueta { align-content: center; gap: 0; }
+  .aro-rebote { animation: rebote 420ms var(--ease-out); }
+  @keyframes rebote { 40% { transform: scale(1.12); } }
+
+  /* Revelado al hacer scroll (solo con JS y sin reducir movimiento) */
+  @media (prefers-reduced-motion: no-preference) {
+    .js .revelar { opacity: 0; transform: translateY(24px); transition: opacity 650ms var(--ease-out), transform 650ms var(--ease-out); transition-delay: calc(var(--i, 0) * 110ms); }
+    .js .revelar.visible { opacity: 1; transform: none; }
+
+    /* Inclinación 3D (variables puestas por animaciones.ts) y elevación al pasar el puntero */
+    .inclinable { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out); will-change: transform; }
+    .inclinable:hover { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px); box-shadow: var(--shadow-tabla), 0 0 0 2px rgb(240 138 36 / 0.7), 0 0 40px rgb(240 138 36 / 0.35); }
+
+    /* Destello de fuego al agregar al pedido */
+    .destello { animation: destello 700ms var(--ease-out); }
+    @keyframes destello { 30% { box-shadow: 0 0 0 3px var(--color-brasa-500), 0 0 60px rgb(240 138 36 / 0.7); } }
+  }
+  .pausado .chispa { animation-play-state: paused; }
+  .carrusel { scrollbar-width: none; }
+  .carrusel::-webkit-scrollbar { display: none; }
+}

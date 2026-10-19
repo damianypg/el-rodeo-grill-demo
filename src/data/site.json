@@ -1,0 +1,24 @@
+{
+  "nombre": "El Rodeo Grill",
+  "tipo": "Restaurante y asadero",
+  "ciudad": "Riobamba",
+  "pais": "EC",
+  "direccion": "Calle Pichincha, entre Guayaquil y 10 de Agosto",
+  "lema": "El mismo sabor de siempre",
+  "whatsapp": "593988552968",
+  "telefonoVisible": "098 855 2968",
+  "priceRange": "$10-15",
+  "precioPorPersona": "$10–15 por persona",
+  "horario": {
+    "nota": "Horario publicado antes de la mudanza. Confírmalo por WhatsApp.",
+    "franjas": [
+      { "dias": "Martes a sábado", "abre": "11:30", "cierra": "21:00", "schema": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] },
+      { "dias": "Domingo y lunes", "abre": "11:30", "cierra": "17:30", "schema": ["Sunday", "Monday"] }
+    ]
+  },
+  "google": { "rating": "4,8", "ratingValue": "4.8", "reviews": 1084 },
+  "destacadosGoogle": ["costillas de res con salsa BBQ", "asado de pollo", "picaña"],
+  "instagram": { "usuario": "@elrodeogrill_riobamba", "url": "https://www.instagram.com/elrodeogrill_riobamba/" },
+  "facebook": { "url": "https://www.facebook.com/ElRodeoGrillRio" },
+  "mapsQuery": "Calle Pichincha y Guayaquil, Riobamba, Ecuador"
+}

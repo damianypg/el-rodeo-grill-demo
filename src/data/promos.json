@@ -1,0 +1,10 @@
+{
+  "fuente": "Publicaciones de Instagram de mayo. PENDIENTE confirmar vigencia.",
+  "nota": "Promos publicadas en mayo. Confirma que sigan vigentes al hacer tu pedido.",
+  "promos": [
+    { "dia": 1, "nombreDia": "Lunes", "plato": "Asado de lomo", "precio": 1599 },
+    { "dia": 2, "nombreDia": "Martes", "plato": "Asado de pollo", "precio": 999 },
+    { "dia": 3, "nombreDia": "Miércoles", "plato": "Asado de chuleta", "precio": 999 },
+    { "dia": 4, "nombreDia": "Jueves", "plato": "Rib eye", "detalle": "Cortes premium", "precio": 1799 }
+  ]
+}

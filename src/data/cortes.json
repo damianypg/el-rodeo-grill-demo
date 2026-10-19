@@ -1,0 +1,110 @@
+{
+  "fuente": "Flyers de Instagram (abril–mayo). PENDIENTE confirmar precios vigentes.",
+  "acompanantes": "Se sirven con papas fritas, ensalada y salsas.",
+  "cortes": [
+    {
+      "id": "rib-eye",
+      "nombre": "Rib Eye",
+      "script": "El corte favorito",
+      "alt": "Afiche del Rib Eye, «el corte favorito»: pequeño $12, mediano $15. Rib eye con hueso sobre tabla negra con papas fritas, ensalada y dos salsas",
+      "tamanos": [
+        {
+          "id": "pequeno",
+          "nombre": "Pequeño",
+          "precio": 1200
+        },
+        {
+          "id": "mediano",
+          "nombre": "Mediano",
+          "precio": 1500
+        }
+      ],
+      "afiche": "flyer-rib-eye"
+    },
+    {
+      "id": "tomahawk",
+      "nombre": "Tomahawk",
+      "script": "El mejor",
+      "alt": "Afiche del Tomahawk, «el mejor»: pequeño $12, mediano $15, grande $20. Tomahawk sobre tabla negra con papas fritas, ensalada y salsas",
+      "tamanos": [
+        {
+          "id": "pequeno",
+          "nombre": "Pequeño",
+          "precio": 1200
+        },
+        {
+          "id": "mediano",
+          "nombre": "Mediano",
+          "precio": 1500
+        },
+        {
+          "id": "grande",
+          "nombre": "Grande",
+          "precio": 2000
+        }
+      ],
+      "afiche": "flyer-tomahawk"
+    },
+    {
+      "id": "picana",
+      "nombre": "Picaña",
+      "script": "Jugosidad y sabor",
+      "alt": "Afiche de la Picaña, «jugosidad y sabor»: pequeño $12, mediano $15. Picaña dorada con papas fritas y ensalada",
+      "tamanos": [
+        {
+          "id": "pequeno",
+          "nombre": "Pequeño",
+          "precio": 1200
+        },
+        {
+          "id": "mediano",
+          "nombre": "Mediano",
+          "precio": 1500
+        }
+      ],
+      "afiche": "flyer-picana"
+    },
+    {
+      "id": "porterhouse",
+      "nombre": "Porterhouse",
+      "script": "Corte fino",
+      "alt": "Afiche del Porterhouse, «corte fino», a $20. Porterhouse con marcas de parrilla, papas fritas, ensalada y salsas",
+      "tamanos": [
+        {
+          "id": "unico",
+          "nombre": "",
+          "precio": 2000
+        }
+      ],
+      "afiche": "flyer-porterhouse"
+    },
+    {
+      "id": "cowboy-steak",
+      "nombre": "Cowboy Steak",
+      "script": "Sabor especial",
+      "alt": "Afiche del Cowboy Steak, «sabor especial», a $12. Cowboy steak con hueso, papas fritas, ensalada y salsas",
+      "tamanos": [
+        {
+          "id": "unico",
+          "nombre": "",
+          "precio": 1200
+        }
+      ],
+      "afiche": "flyer-cowboy-steak"
+    },
+    {
+      "id": "t-bone",
+      "nombre": "T-Bone",
+      "script": null,
+      "alt": "",
+      "tamanos": [
+        {
+          "id": "unico",
+          "nombre": "",
+          "precio": 1200
+        }
+      ],
+      "afiche": null
+    }
+  ]
+}

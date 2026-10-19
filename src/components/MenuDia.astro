@@ -1,0 +1,47 @@
+---
+import menuAfiche from '../assets/flyers/flyer-menu-del-dia.jpg';
+import yahuarAfiche from '../assets/flyers/flyer-yahuarlocro.jpg';
+import menu from '../data/menu.json';
+import Brasas from './Brasas.astro';
+import Foto from './Foto.astro';
+import { formatoPrecio } from '../lib/precio';
+
+const bloques = [
+  { ...menu.menuDia, img: menuAfiche, subtitulo: null as string | null },
+  { ...menu.yahuarlocro, img: yahuarAfiche },
+];
+---
+<section id="menu-del-dia" class="madera seccion overflow-hidden" aria-labelledby="menu-titulo">
+  <Brasas class="-top-24 rotate-180 opacity-60" chispas={0} />
+  <div class="contenedor">
+    <div class="revelar">
+      <p class="script text-script-xl -mb-1">Para el almuerzo</p>
+      <h2 id="menu-titulo" class="text-h2">Menú del día y yahuarlocro</h2>
+    </div>
+
+    <div class="mt-10 grid gap-8 md:grid-cols-2">
+      {bloques.map((b, i) => (
+        <article class="revelar inclinable flex flex-col overflow-hidden rounded-(--radius-tabla) bg-carbon-950 shadow-(--shadow-tabla) ring-1 ring-white/10" style={`--i:${i}`}>
+          <div class="mx-auto w-full" style={`max-width:${b.img.width}px`}>
+            <Foto src={b.img} alt={b.alt} sizes="(min-width: 768px) calc(50vw - 40px), calc(100vw - 32px)" />
+          </div>
+          <div class="flex flex-1 flex-col gap-5 p-5 md:p-7">
+            <h3 class="text-h3">
+              {b.titulo}
+              {b.subtitulo && <span class="mt-1 block font-sans text-base font-bold tracking-normal text-oro-300 normal-case">{b.subtitulo}</span>}
+            </h3>
+            <ul class="grid gap-3">
+              {b.opciones.map((o) => (
+                <li class="flex items-center gap-4 border-b border-white/10 pb-3 last:border-b-0 last:pb-0">
+                  <span class="flex-1 font-semibold text-white">{o.nombre}</span>
+                  <span class="font-display text-[1.375rem] text-brasa-500">{formatoPrecio(o.precio)}</span>
+                  <button type="button" class="btn btn-outline btn-sm shrink-0" data-agregar={o.id} aria-label={`Agregar ${o.pedido.toLowerCase()} al pedido`}>Agregar</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

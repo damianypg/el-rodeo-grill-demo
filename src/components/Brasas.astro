@@ -1,0 +1,19 @@
+---
+// Banda de brasas + chispas que suben. Posiciones deterministas para no cambiar entre builds.
+interface Props { chispas?: number; class?: string }
+const { chispas = 16, class: cls = 'bottom-0' } = Astro.props;
+const lista = Array.from({ length: chispas }, (_, i) => {
+  const r = (n: number) => ((Math.sin((i + 1) * n) + 1) / 2);
+  return {
+    x: `${Math.round(r(12.9) * 100)}%`,
+    s: `${(2 + r(7.3) * 3).toFixed(1)}px`,
+    d: `${(8 + r(3.1) * 6).toFixed(1)}s`,
+    delay: `-${(r(5.7) * 12).toFixed(1)}s`,
+    dx: `${Math.round((r(9.1) - 0.5) * 120)}px`,
+  };
+});
+---
+<div class:list={['brasas', cls]} aria-hidden="true"></div>
+<div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+  {lista.map((c) => <span class="chispa" style={`--x:${c.x};--s:${c.s};--d:${c.d};--delay:${c.delay};--dx:${c.dx}`}></span>)}
+</div>

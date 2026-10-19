@@ -1,0 +1,148 @@
+---
+import promos from '../data/promos.json';
+import menu from '../data/menu.json';
+import menuAfiche from '../assets/flyers/flyer-menu-del-dia.jpg';
+import yahuarAfiche from '../assets/flyers/flyer-yahuarlocro.jpg';
+import Icon from './Icon.astro';
+import Brasas from './Brasas.astro';
+import Precio from './Precio.astro';
+import Foto from './Foto.astro';
+import { waLink, waMensajes } from '../lib/wa';
+
+const siguientePromo = promos.promos[0];
+// Días sin 2x1 (viernes a domingo): el afiche ya muestra los precios, así que no se repiten en aro. Si cambian los días de promo, actualizar también `esPromo` en el script.
+const sinPromo = [
+  { dia: 5, titulo: 'Hoy no hay 2x1', texto: `El 2x1 vuelve el lunes con ${siguientePromo.plato.toLowerCase()}. Hoy te esperamos con nuestros cortes y el menú del día.`, cta: ['#cortes', 'Ver los cortes'] },
+  { dia: 6, titulo: 'Menú especial de sábado', texto: `El 2x1 vuelve el lunes con ${siguientePromo.plato.toLowerCase()}.`, cta: ['#menu-del-dia', 'Ver el menú de hoy'] },
+  { dia: 0, titulo: 'Yahuarlocro de domingo', texto: `El 2x1 vuelve el lunes con ${siguientePromo.plato.toLowerCase()}.`, cta: ['#menu-del-dia', 'Ver el menú de hoy'] },
+];
+---
+<section id="promo-hoy" class="madera-roja seccion overflow-hidden" aria-labelledby="promo-hoy-titulo">
+  <Brasas class="bottom-0 opacity-70" chispas={10} />
+  <div class="contenedor">
+    <!-- Sin JS se ve el sello 2x1 y la semana completa; con JS se destaca el día de hoy (America/Guayaquil). -->
+    <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,420px)_1fr] lg:gap-16">
+      <div class="mx-auto w-full max-w-[420px]">
+        <div class="sello-2x1" data-sello aria-hidden="true">
+          <span class="sello-hoy" data-sello-hoy hidden>Hoy</span>
+          <span class="sello-num">2x1</span>
+          <span class="sello-pie">Lunes a jueves</span>
+        </div>
+        <div class="poster-dia" data-afiche-dias="5,6" hidden>
+          <Foto src={menuAfiche} alt={menu.menuDia.alt} sizes="(min-width: 1024px) 420px, calc(100vw - 32px)" />
+        </div>
+        <div class="poster-dia" data-afiche-dias="0" hidden>
+          <Foto src={yahuarAfiche} alt={menu.yahuarlocro.alt} sizes="(min-width: 1024px) 420px, calc(100vw - 32px)" />
+        </div>
+      </div>
+
+      <div>
+        <p class="script text-script-xl -mb-1" data-promo-script>Todas las semanas</p>
+        <h2 id="promo-hoy-titulo" class="text-h2" data-promo-titulo>Promos 2x1 de lunes a jueves</h2>
+
+        {promos.promos.map((p) => (
+          <div class="promo-destacada mt-6 flex flex-wrap items-center gap-6" data-hoy-dia={p.dia} hidden>
+            <Precio centavos={p.precio} tamano="lg" data-contar />
+            <div class="flex flex-col gap-3">
+              <p class="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] leading-none text-white uppercase">{p.plato} 2x1{p.detalle && <span class="block text-[0.6em] text-oro-300">{p.detalle}</span>}</p>
+              <div class="flex flex-wrap gap-3">
+                <a class="btn btn-primary" href={waLink(waMensajes.promo(p.nombreDia, p.plato))} target="_blank" rel="noopener" data-wa>
+                  <Icon name="whatsapp" />Pedir la promo de hoy
+                </a>
+                <button type="button" class="btn btn-outline" data-agregar={`promo-${p.dia}`}>Agregar al pedido</button>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {sinPromo.map((d) => (
+          <div class="promo-destacada mt-6 flex flex-wrap items-center gap-6" data-hoy-dia={d.dia} hidden>
+            <div class="flex flex-col gap-3">
+              <p class="font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.75rem)] leading-none text-white uppercase">{d.titulo}</p>
+              <p class="max-w-[46ch] text-hueso-50">{d.texto}</p>
+              <div class="flex flex-wrap gap-3">
+                <a class="btn btn-primary" href={d.cta[0]}>{d.cta[1]}</a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <ol class="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4" aria-label="Promos 2x1 de la semana">
+      {promos.promos.map((p, i) => (
+        <li class="semana-dia revelar relative flex flex-col gap-1 rounded-(--radius-tabla) border-2 border-white/25 bg-carbon-950/45 p-4 md:p-5" data-dia={p.dia} style={`--i:${i}`}>
+          <span class="flex items-center justify-between gap-2 text-[0.9375rem] font-bold text-oro-300">
+            {p.nombreDia}
+            <span class="semana-hoy hidden rounded-full bg-brasa-500 px-2.5 text-[0.8125rem] leading-6 text-carbon-950">Hoy</span>
+          </span>
+          <span class="font-display text-[1.375rem] leading-tight text-white uppercase">{p.plato} 2x1</span>
+          <span class="mt-auto pt-1 font-display text-[1.375rem] text-brasa-300">
+            ${Math.floor(p.precio / 100)}<sup class="text-[0.6em]">{String(p.precio % 100).padStart(2, '0')}</sup>
+          </span>
+        </li>
+      ))}
+    </ol>
+    <p class="mt-5 text-[0.875rem] text-hueso-50/85">{promos.nota}</p>
+  </div>
+</section>
+
+<style>
+  /* Sello 2x1 sólido: disco rojo con ribete dorado y numerales blancos con relieve. */
+  .sello-2x1 {
+    position: relative; display: grid; place-items: center; align-content: center;
+    aspect-ratio: 1; width: min(calc(100% - 40px), 360px); margin: 20px auto; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e8502f, var(--color-rojo-500) 45%, #9e2412);
+    border: 6px solid var(--color-oro-300);
+    box-shadow: 0 0 0 10px rgb(14 9 7 / 0.55), 0 0 0 13px var(--color-oro-500), 0 30px 60px -10px rgb(0 0 0 / 0.7), 0 0 80px rgb(240 138 36 / 0.5);
+    color: #fff; text-align: center;
+  }
+  .sello-2x1[hidden] { display: none; }
+  .sello-num {
+    font-family: var(--font-display); font-size: clamp(6rem, 4rem + 9vw, 9.5rem); line-height: 0.9;
+    text-shadow: 0.035em 0.035em 0 #7a1a10, 0.07em 0.07em 0 rgb(14 9 7 / 0.6);
+  }
+  .sello-pie { font-family: var(--font-display); font-size: 1.25rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-oro-300); margin-top: 0.5rem; }
+  .sello-hoy {
+    position: absolute; top: 4%; right: 2%; transform: rotate(12deg);
+    background: var(--color-oro-300); color: var(--color-carbon-950);
+    font-family: var(--font-display); font-size: 1.5rem; text-transform: uppercase; padding: 0.15em 0.6em; border-radius: 8px;
+    box-shadow: 0 6px 16px rgb(0 0 0 / 0.5);
+  }
+  .sello-hoy:not([hidden]) { display: block; }
+  .poster-dia { transform: rotate(-2.5deg); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px -18px rgb(0 0 0 / 0.85), 0 0 0 3px rgb(255 255 255 / 0.9), 0 0 60px rgb(240 138 36 / 0.4); }
+  @media (prefers-reduced-motion: no-preference) {
+    .sello-2x1 { animation: girar-sello 7s ease-in-out infinite; }
+  }
+  @keyframes girar-sello {
+    0%, 100% { transform: rotate(-6deg) scale(1); }
+    50% { transform: rotate(4deg) scale(1.04); }
+  }
+  .semana-dia[data-hoy] { border-color: var(--color-brasa-500); background: rgb(14 9 7 / 0.7); box-shadow: 0 0 0 4px rgb(240 138 36 / 0.25), 0 0 40px rgb(240 138 36 / 0.25); }
+  .semana-dia[data-hoy] .semana-hoy { display: inline-block; }
+</style>
+
+<script>
+  const corto = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'America/Guayaquil' }).format(new Date());
+  const hoy = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(corto);
+  const nombres = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+  const seccion = document.getElementById('promo-hoy')!;
+  const destacada = seccion.querySelector<HTMLElement>(`.promo-destacada[data-hoy-dia="${hoy}"]`);
+  const esPromo = hoy >= 1 && hoy <= 4;
+  if (destacada) {
+    destacada.hidden = false;
+    seccion.dataset.dia = String(hoy);
+    seccion.querySelector('[data-promo-script]')!.textContent = `Hoy es ${nombres[hoy]}`;
+    seccion.querySelector('[data-promo-titulo]')!.textContent = esPromo ? 'La promo de hoy' : 'Hoy en El Rodeo';
+    if (esPromo) {
+      seccion.querySelector<HTMLElement>('[data-sello-hoy]')!.hidden = false;
+    } else {
+      // Sin 2x1 hoy: en lugar del sello se muestra el afiche del menú (vie–sáb) o del yahuarlocro (dom).
+      seccion.querySelector<HTMLElement>('[data-sello]')!.hidden = true;
+      for (const a of seccion.querySelectorAll<HTMLElement>('[data-afiche-dias]')) {
+        a.hidden = !a.dataset.aficheDias!.split(',').includes(String(hoy));
+      }
+    }
+  }
+  seccion.querySelector<HTMLElement>(`.semana-dia[data-dia="${hoy}"]`)?.setAttribute('data-hoy', '');
+</script>

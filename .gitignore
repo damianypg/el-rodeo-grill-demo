@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+test-results/
+playwright-report/
+lighthouse/
+.self-eval-scores.jsonl
+.pages/
+.env
+.env.*
+!.env.example

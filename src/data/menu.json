@@ -1,0 +1,50 @@
+{
+  "fuente": "Flyers 'Menú del día' y 'Yahuarlocro'. PENDIENTE confirmar vigencia.",
+  "menuDia": {
+    "titulo": "Menú del día",
+    "script": null,
+    "alt": "Afiche del menú del día: de martes a viernes $3,75, tercera edad $3,50, sábado y domingo menú especial $5. Sopa con aguacate, arroz con carne en salsa, maduro, jugo y postre",
+    "opciones": [
+      {
+        "id": "menu-semana",
+        "nombre": "Martes a viernes",
+        "pedido": "Menú del día",
+        "precio": 375
+      },
+      {
+        "id": "menu-tercera-edad",
+        "nombre": "Tercera edad",
+        "pedido": "Menú del día tercera edad",
+        "precio": 350
+      },
+      {
+        "id": "menu-especial",
+        "nombre": "Fin de semana (menú especial)",
+        "pedido": "Menú especial de fin de semana",
+        "precio": 500
+      }
+    ],
+    "afiche": "flyer-menu-del-dia"
+  },
+  "yahuarlocro": {
+    "titulo": "Yahuarlocro",
+    "script": "Exquisito",
+    "subtitulo": "Todos los domingos",
+    "alt": "Afiche del yahuarlocro, todos los domingos: solo $4,50, con almuerzo $6. Yahuarlocro con sangrita, tomate, cebolla y aguacate",
+    "opciones": [
+      {
+        "id": "yahuarlocro",
+        "nombre": "Solo",
+        "pedido": "Yahuarlocro",
+        "precio": 450
+      },
+      {
+        "id": "yahuarlocro-almuerzo",
+        "nombre": "Con almuerzo",
+        "pedido": "Yahuarlocro con almuerzo",
+        "precio": 600
+      }
+    ],
+    "afiche": "flyer-yahuarlocro"
+  }
+}

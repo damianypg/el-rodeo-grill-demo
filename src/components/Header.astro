@@ -1,0 +1,31 @@
+---
+import Sello from './Sello.astro';
+import Icon from './Icon.astro';
+import { waLink, waMensajes } from '../lib/wa';
+const nav = [
+  ['#promo-hoy', 'Promo de hoy'],
+  ['#cortes', 'Cortes'],
+  ['#menu-del-dia', 'Menú del día'],
+  ['#galeria', 'Galería'],
+  ['#visitanos', 'Visítanos'],
+];
+---
+<header class="sticky top-0 z-40 border-b border-white/10 bg-carbon-950/85 backdrop-blur-md">
+  <div class="contenedor flex h-[68px] items-center justify-between gap-4">
+    <a href="#inicio" class="flex min-h-11 items-center gap-3 rounded-full">
+      <Sello size={46} loading="eager" />
+      <span class="font-display text-[1.375rem] tracking-wide text-white uppercase">El Rodeo Grill</span>
+    </a>
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex gap-1 text-[0.9375rem] font-semibold">
+        {nav.map(([href, txt]) => (
+          <li><a class="flex min-h-11 items-center rounded-full px-3.5 text-hueso-50 hover:text-oro-300" href={href}>{txt}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <a class="btn btn-primary btn-sm relative" href={waLink(waMensajes.pedido)} target="_blank" rel="noopener" data-wa data-enlace-pedido>
+      <Icon name="whatsapp" />Pedir
+      <span class="absolute -top-1.5 -right-1.5 hidden min-w-6 rounded-full bg-rojo-500 px-1.5 text-center text-[0.8125rem] leading-6 font-bold text-white ring-2 ring-carbon-950" data-contador aria-hidden="true"></span>
+    </a>
+  </div>
+</header>

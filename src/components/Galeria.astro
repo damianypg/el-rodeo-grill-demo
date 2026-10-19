@@ -1,0 +1,107 @@
+---
+import { Image, getImage } from 'astro:assets';
+import ribeye from '../assets/platos/plato-rib-eye.jpg';
+import tomahawk from '../assets/platos/plato-tomahawk.jpg';
+import porterhouse from '../assets/platos/plato-porterhouse.jpg';
+import picana from '../assets/platos/plato-picana.jpg';
+import cowboy from '../assets/platos/plato-cowboy-steak.jpg';
+import menuDia from '../assets/platos/plato-menu-del-dia.jpg';
+import yahuar from '../assets/platos/plato-yahuarlocro.jpg';
+import coctel from '../assets/own-rodeo-coctel.jpg';
+import vaquerito from '../assets/own-rodeo-vaquerito.jpg';
+import ensalada from '../assets/own-rodeo-ensalada.jpg';
+
+// Masonry: cada foto conserva su proporción real y nunca supera su ancho natural.
+const fotos = [
+  { img: ribeye, alt: 'Rib eye con papas fritas, ensalada y salsas' },
+  { img: coctel, alt: 'Coctel de colores en vaso tiki con sombrilla de papel' },
+  { img: picana, alt: 'Picaña a la brasa con papas fritas y ensalada' },
+  { img: vaquerito, alt: 'Helado Vaquerito bañado en chocolate con confites' },
+  { img: tomahawk, alt: 'Tomahawk a la parrilla con papas fritas y salsas' },
+  { img: yahuar, alt: 'Yahuarlocro con tomate, cebolla y aguacate' },
+  { img: porterhouse, alt: 'Porterhouse con marcas de parrilla, papas y ensalada' },
+  { img: ensalada, alt: 'Ensalada fresca con tomates y zanahoria rallada' },
+  { img: cowboy, alt: 'Cowboy steak con hueso, papas fritas y ensalada' },
+  { img: menuDia, alt: 'Menú del día con sopa, segundo, jugo y postre' },
+] as const;
+
+const grandes = await Promise.all(fotos.map((f) => getImage({ src: f.img, width: f.img.width, format: 'webp' })));
+---
+<section id="galeria" class="carbon seccion" aria-labelledby="galeria-titulo">
+  <div class="contenedor">
+    <p class="script text-script-xl -mb-1">Así sale de la parrilla</p>
+    <h2 id="galeria-titulo" class="text-h2">Galería</h2>
+
+    <ul class="galeria mt-10 columns-2 gap-3 md:columns-3 md:gap-4">
+      {fotos.map((f, i) => (
+        <li class="revelar mb-3 break-inside-avoid md:mb-4" style={`--i:${i % 3}`}>
+          <button
+            type="button"
+            class="group relative mx-auto block w-full overflow-hidden rounded-2xl bg-madera-800"
+            style={`max-width:${f.img.width}px`}
+            data-lightbox={i}
+            data-src={grandes[i].src}
+            data-w={f.img.width}
+            data-h={f.img.height}
+            data-alt={f.alt}
+            aria-label={`Ver foto ampliada: ${f.alt}`}
+          >
+            <Image src={f.img} alt="" widths={[Math.min(360, f.img.width), f.img.width]} sizes="(min-width: 768px) 390px, 50vw" class="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]" style={`aspect-ratio:${f.img.width}/${f.img.height}`} loading="lazy" />
+          </button>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 text-[0.875rem] muted">Fotos de nuestras publicaciones. Pronto, fotos del local nuevo.</p>
+  </div>
+
+  <dialog class="lightbox m-auto max-h-none max-w-none bg-transparent p-0 text-white backdrop:bg-carbon-950/92" aria-labelledby="lightbox-pie" data-lightbox-dialog>
+    <div class="relative flex min-h-dvh w-screen flex-col items-center justify-center gap-4 p-4 md:p-10">
+      <img class="max-h-[78dvh] w-auto max-w-full rounded-none object-contain md:rounded-2xl" alt="" data-lightbox-img />
+      <p id="lightbox-pie" class="max-w-[60ch] text-center text-hueso-50" data-lightbox-pie></p>
+      <p class="text-[0.875rem] muted" data-lightbox-cuenta></p>
+      <div class="flex gap-3">
+        <button type="button" class="btn btn-outline btn-sm" data-lightbox-prev aria-label="Foto anterior">‹ Anterior</button>
+        <button type="button" class="btn btn-outline btn-sm" data-lightbox-next aria-label="Foto siguiente">Siguiente ›</button>
+      </div>
+      <button type="button" class="btn btn-primary btn-sm absolute top-4 right-4" data-lightbox-cerrar>Cerrar</button>
+    </div>
+  </dialog>
+</section>
+
+<script>
+  const dialogo = document.querySelector<HTMLDialogElement>('[data-lightbox-dialog]')!;
+  const img = dialogo.querySelector<HTMLImageElement>('[data-lightbox-img]')!;
+  const pie = dialogo.querySelector<HTMLElement>('[data-lightbox-pie]')!;
+  const cuenta = dialogo.querySelector<HTMLElement>('[data-lightbox-cuenta]')!;
+  const miniaturas = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-lightbox]'));
+  let actual = 0;
+  let origen: HTMLElement | null = null;
+
+  function mostrar(i: number) {
+    actual = (i + miniaturas.length) % miniaturas.length;
+    const m = miniaturas[actual].dataset;
+    img.src = m.src!;
+    img.width = Number(m.w);
+    img.height = Number(m.h);
+    img.alt = m.alt!;
+    pie.textContent = m.alt!;
+    cuenta.textContent = `Foto ${actual + 1} de ${miniaturas.length}`;
+  }
+
+  miniaturas.forEach((b, i) => b.addEventListener('click', () => {
+    origen = b;
+    mostrar(i);
+    dialogo.showModal();
+  }));
+  dialogo.querySelector('[data-lightbox-prev]')!.addEventListener('click', () => mostrar(actual - 1));
+  dialogo.querySelector('[data-lightbox-next]')!.addEventListener('click', () => mostrar(actual + 1));
+  dialogo.querySelector('[data-lightbox-cerrar]')!.addEventListener('click', () => dialogo.close());
+  dialogo.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); mostrar(actual + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); mostrar(actual - 1); }
+  });
+  // Clic en el fondo (fuera de la foto y los controles) cierra.
+  dialogo.addEventListener('click', (e) => { if (e.target === dialogo || e.target === dialogo.firstElementChild) dialogo.close(); });
+  dialogo.addEventListener('close', () => origen?.focus());
+</script>
+

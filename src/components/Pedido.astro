@@ -1,0 +1,82 @@
+---
+import cortes from '../data/cortes.json';
+import menu from '../data/menu.json';
+import promos from '../data/promos.json';
+import Icon from './Icon.astro';
+import { waLink, waMensajes } from '../lib/wa';
+
+// Catálogo para el constructor: id → nombre en el mensaje y precio en centavos.
+const catalogo: Record<string, { nombre: string; precio: number }> = {};
+for (const c of cortes.cortes) {
+  for (const t of c.tamanos) {
+    catalogo[`${c.id}:${t.id}`] = { nombre: t.nombre ? `${c.nombre} ${t.nombre.toLowerCase()}` : c.nombre, precio: t.precio };
+  }
+}
+for (const o of [...menu.menuDia.opciones, ...menu.yahuarlocro.opciones]) catalogo[o.id] = { nombre: o.pedido, precio: o.precio };
+for (const p of promos.promos) catalogo[`promo-${p.dia}`] = { nombre: `Promo 2x1 del ${p.nombreDia.toLowerCase()}: ${p.plato.toLowerCase()}`, precio: p.precio };
+
+const pasos = ['Agrega cortes, promos o el menú del día.', 'Revisa cantidades y deja una nota si quieres.', 'Envíalo por WhatsApp y te confirmamos.'];
+---
+<section id="pedido" class="madera seccion" aria-labelledby="pedido-titulo">
+  <div class="contenedor grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+    <div>
+      <p class="script text-script-xl -mb-1">En un solo mensaje</p>
+      <h2 id="pedido-titulo" class="text-h2">Arma tu pedido</h2>
+      <ol class="mt-8 grid gap-5">
+        {pasos.map((p, i) => (
+          <li class="flex items-center gap-4">
+            <span class="grid size-12 shrink-0 place-items-center rounded-full border-2 border-oro-500 font-display text-xl text-oro-300" aria-hidden="true">{i + 1}</span>
+            <span class="text-lead text-hueso-50">{p}</span>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-8 text-[0.875rem] muted">El total es referencial: los precios vienen de nuestras publicaciones y se confirman en el chat. No guardamos tus datos.</p>
+    </div>
+
+    <div class="self-start rounded-(--radius-tabla) bg-carbon-950/90 p-5 shadow-(--shadow-tabla) ring-1 ring-white/10 md:p-8" data-pedido>
+      <h3 class="flex items-baseline justify-between gap-4 text-h3">
+        Tu pedido <span class="font-sans text-base font-semibold tracking-normal text-humo-300 normal-case" data-pedido-cuenta>0 productos</span>
+      </h3>
+
+      <div class="mt-6 rounded-2xl border-2 border-dashed border-cafe-600 p-6 text-center" data-pedido-vacio>
+        <p class="font-semibold text-white">Todavía no agregas nada.</p>
+        <p class="mt-1 muted">Elige tus cortes y toca «Agregar al pedido».</p>
+        <a class="btn btn-primary btn-sm mt-5" href="#cortes">Ver los cortes</a>
+      </div>
+
+      <ul class="mt-6 grid gap-3" data-pedido-lista hidden></ul>
+
+      <div class="mt-6 grid gap-6" data-pedido-form hidden>
+        <p class="flex items-baseline justify-between border-t border-white/15 pt-5">
+          <span class="font-semibold text-white">Total referencial</span>
+          <span class="font-display text-[2rem] text-brasa-500" data-pedido-total>$0,00</span>
+        </p>
+        <fieldset>
+          <legend class="mb-2 font-semibold text-white">¿Cómo lo quieres?</legend>
+          <div class="flex flex-wrap gap-2">
+            {[['local', 'Comer en el local'], ['retirar', 'Retirar en el local']].map(([v, t], i) => (
+              <label class="cursor-pointer">
+                <input class="peer sr-only" type="radio" name="modalidad" value={v} checked={i === 0} data-modalidad={t} />
+                <span class="flex min-h-11 items-center rounded-full border-2 border-cafe-600 px-4 font-semibold text-hueso-50 peer-checked:border-brasa-500 peer-checked:bg-brasa-500 peer-checked:text-carbon-950 peer-focus-visible:outline-3 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-oro-300">{t}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <div>
+          <label for="pedido-nota" class="mb-2 block font-semibold text-white">Nota para la cocina <span class="font-normal muted">(opcional)</span></label>
+          <textarea id="pedido-nota" maxlength="200" rows="2" class="w-full rounded-xl border-2 border-cafe-600 bg-madera-900 px-4 py-3 text-hueso-50 placeholder:text-humo-300/80 focus:border-oro-300 focus-visible:outline-oro-300" placeholder="Ej.: término medio, sin cebolla" data-pedido-nota></textarea>
+        </div>
+        <a class="btn btn-primary w-full" href={waLink(waMensajes.pedido)} target="_blank" rel="noopener" data-wa data-pedido-enviar>
+          <Icon name="whatsapp" />Enviar pedido por WhatsApp
+        </a>
+      </div>
+      <p class="sr-only" aria-live="polite" data-pedido-aviso></p>
+    </div>
+  </div>
+  <script type="application/json" id="catalogo" set:html={JSON.stringify(catalogo).replace(/</g, '\\u003c')}></script>
+</section>
+
+<script>
+  import { iniciarPedido } from '../scripts/pedido';
+  iniciarPedido();
+</script>

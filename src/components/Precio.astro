@@ -1,0 +1,13 @@
+---
+import { partesPrecio, formatoPrecio } from '../lib/precio';
+interface Props { centavos: number; tamano?: 'sm' | 'md' | 'lg'; etiqueta?: string; class?: string; [k: string]: unknown }
+const { centavos, tamano = 'md', etiqueta, class: cls = '', ...rest } = Astro.props;
+const { entero, cent } = partesPrecio(centavos);
+---
+<span class:list={['aro', tamano !== 'md' && `aro-${tamano}`, etiqueta && 'aro-con-etiqueta', cls]} {...rest}>
+  {etiqueta && <span class="aro-etiqueta" aria-hidden="true">{etiqueta}</span>}
+  <span class="aro-cifra" aria-hidden="true" data-cifra>
+    <span class="aro-signo">$</span><span class="aro-entero" data-entero>{entero}</span><span class="aro-cent" data-cent>{cent}</span>
+  </span>
+  <span class="sr-only" data-texto>{etiqueta ? `${etiqueta} ` : ''}{formatoPrecio(centavos)}</span>
+</span>

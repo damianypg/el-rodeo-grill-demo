@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import { waLink, waMensajes } from '../lib/wa';
+---
+<!-- Móvil: barra de ancho completo. Desde 1024 px: botón flotante. Con productos en el pedido, lleva a #pedido. -->
+<a
+  href={waLink(waMensajes.pedido)}
+  target="_blank"
+  rel="noopener"
+  data-wa
+  data-barra-wa
+  class="barra-wa fixed z-50 flex items-center justify-center gap-3 bg-wa-500 font-bold text-carbon-950 shadow-(--shadow-float)"
+>
+  <Icon name="whatsapp" class="size-7" />
+  <span data-barra-texto>Pedir por WhatsApp</span>
+</a>
+
+<style>
+  .barra-wa { inset-inline: 0; bottom: 0; min-height: 60px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); font-size: 1.0625rem; transition: transform 200ms var(--ease-out); }
+  .barra-wa:focus-visible { outline: 3px solid var(--color-carbon-950); outline-offset: -6px; }
+  /* Pulso discreto cada pocos segundos para recordar que está ahí */
+  @media (prefers-reduced-motion: no-preference) {
+    .barra-wa::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 0 0 0 rgb(37 211 102 / 0.55); animation: pulso 3.5s ease-out 2s infinite; pointer-events: none; }
+  }
+  @keyframes pulso { 0% { box-shadow: 0 0 0 0 rgb(37 211 102 / 0.55); } 40%, 100% { box-shadow: 0 0 0 16px rgb(37 211 102 / 0); } }
+  @media (min-width: 1024px) {
+    .barra-wa { inset-inline: auto; right: 24px; bottom: 24px; min-height: 56px; padding: 10px 24px; border-radius: 999px; }
+    .barra-wa:hover { transform: translateY(-2px); }
+    .barra-wa:focus-visible { outline: 3px solid var(--color-oro-300); outline-offset: 3px; }
+  }
+</style>

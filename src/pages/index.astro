@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import Aviso from '../components/Aviso.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import PromoHoy from '../components/PromoHoy.astro';
+import Cortes from '../components/Cortes.astro';
+import MenuDia from '../components/MenuDia.astro';
+import Pedido from '../components/Pedido.astro';
+import Galeria from '../components/Galeria.astro';
+import Resenas from '../components/Resenas.astro';
+import Visitanos from '../components/Visitanos.astro';
+import Footer from '../components/Footer.astro';
+import BarraWhatsApp from '../components/BarraWhatsApp.astro';
+import Marquee from '../components/Marquee.astro';
+---
+<Base
+  title="El Rodeo Grill, restaurante y asadero en Riobamba"
+  description="Rib eye, tomahawk, picaña y cortes a la brasa en Riobamba. Promos 2x1 de lunes a jueves y menú del día. Nuevo local en la calle Pichincha, entre Guayaquil y 10 de Agosto. Pide por WhatsApp."
+>
+  <a href="#contenido" class="sr-only z-[60] rounded-full bg-oro-300 px-5 py-3 font-bold text-carbon-950 focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Saltar al contenido</a>
+  <Aviso />
+  <Header />
+  <main id="contenido">
+    <Hero />
+    <Marquee />
+    <PromoHoy />
+    <Cortes />
+    <Marquee />
+    <MenuDia />
+    <Pedido />
+    <Galeria />
+    <Resenas />
+    <Visitanos />
+  </main>
+  <Footer />
+  <BarraWhatsApp />
+</Base>

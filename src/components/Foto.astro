@@ -1,0 +1,45 @@
+---
+// Imagen que nunca se muestra por encima de su ancho natural ni se recorta (DESIGN.md §4).
+// El contenedor toma la proporción exacta del archivo; en desarrollo avisa si alguien la escala de más.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  sizes: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'auto';
+  class?: string;
+}
+const { src, alt, sizes, loading = 'lazy', fetchpriority, class: cls = '' } = Astro.props;
+// Variantes ≤ ancho natural. Calidad 72: los afiches siguen nítidos y pesan ~30 % menos (cuida el LCP en móvil).
+const anchos = [...new Set([400, 560, src.width].filter((w) => w <= src.width))];
+---
+<Image
+  src={src}
+  alt={alt}
+  widths={anchos}
+  sizes={sizes}
+  loading={loading}
+  fetchpriority={fetchpriority}
+  decoding="async"
+  quality={72}
+  class:list={['foto block h-auto w-full', cls]}
+  data-ancho-natural={src.width}
+  style={`max-width:${src.width}px;aspect-ratio:${src.width}/${src.height}`}
+/>
+
+<script>
+  // Solo en desarrollo: avisa si una foto se muestra más ancha que su archivo (se vería pixelada).
+  if (import.meta.env.DEV) {
+    const revisar = () => {
+      for (const img of document.querySelectorAll<HTMLImageElement>('img.foto')) {
+        const natural = Number(img.dataset.anchoNatural);
+        if (img.clientWidth > natural) console.warn(`[Foto] ${img.alt.slice(0, 40)}… se muestra a ${img.clientWidth}px, más que su ancho natural (${natural}px).`);
+      }
+    };
+    addEventListener('load', revisar);
+    addEventListener('resize', revisar);
+  }
+</script>
